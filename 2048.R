@@ -8,11 +8,13 @@
 #################################################################
 
 main = function(){
+  
   #Installing Graphic Package Raster
   if(!require("raster")){
     install.packages(raster)
   }
   library(raster)
+  
   initialize_board = function(){
     board <<- matrix(rep(0,4),4,4)
   }
@@ -25,6 +27,7 @@ main = function(){
          yaxt = "n", ann = FALSE,
          main = "2048")
   }
+  
   add_number = function(){
     if(max(board) <= 512){
       board[sample(which(board == 0), 1)] <<- 2
@@ -32,6 +35,7 @@ main = function(){
       board[sample(which(board == 0), 1)] <<- sample(c(2,4), 1)
     }
   }
+  
   go_down = function(){
     for(i in 1:4){
       if(sum(board[,i]) != 0){
@@ -67,21 +71,25 @@ main = function(){
       }
     }
   }
+  
   go_up = function(){
     board <<- board[ncol(board):1,]
     go_down()
     board <<- board[ncol(board):1,]
   }
+  
   go_left = function(){
     board <<- t(board)[ncol(board):1,]
     go_down()
     board <<- t(board[nrow(board):1,])
   }
+  
   go_right = function(){
     board <<- t(board[nrow(board):1,])
     go_down()
     board <<- t(board)[ncol(board):1,]
   }
+  
   #The game is over if no moves can change the board
   is_over = function(){
     temp_board = board
@@ -112,6 +120,7 @@ main = function(){
     return(TRUE)
   }
   
+  #Game starting routine
   initialize_board()
   while(!is_over()){
     add_number()
@@ -152,5 +161,6 @@ main = function(){
   }
 }
 
+#Start the Game when the program is executed
 main()
 
